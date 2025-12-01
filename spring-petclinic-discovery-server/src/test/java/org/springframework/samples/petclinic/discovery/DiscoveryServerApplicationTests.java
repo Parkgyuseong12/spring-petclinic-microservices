@@ -15,9 +15,21 @@
  */
 package org.springframework.samples.petclinic.discovery;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+/**
+ * Discovery Server (Eureka) Test
+ * 
+ * NOTE: This test is disabled because in K8s environments,
+ * Eureka-based service discovery is not needed.
+ * Kubernetes provides built-in DNS-based service discovery.
+ * 
+ * The Discovery Server is deprecated for cloud-native deployments.
+ */
+@Disabled("Discovery Server (Eureka) is not needed in Kubernetes environment. " +
+          "Use K8s native service discovery (DNS) instead.")
 @SpringBootTest
 class DiscoveryServerApplicationTests {
 

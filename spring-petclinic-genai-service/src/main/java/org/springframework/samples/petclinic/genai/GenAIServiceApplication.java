@@ -17,12 +17,16 @@ package org.springframework.samples.petclinic.genai;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
+ * GenAI Service Application
+ * 
+ * NOTE: @EnableDiscoveryClient has been removed because in Kubernetes
+ * environments, we use native K8s service discovery (DNS) instead of
+ * Spring Cloud Eureka.
+ * 
  * @author Oded Shopen
  */
-@EnableDiscoveryClient
 @SpringBootApplication
 public class GenAIServiceApplication {
 

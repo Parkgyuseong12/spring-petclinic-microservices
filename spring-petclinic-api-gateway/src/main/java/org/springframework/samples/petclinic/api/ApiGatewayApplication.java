@@ -23,7 +23,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.circuitbreaker.resilience4j.ReactiveResilience4JCircuitBreakerFactory;
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder;
 import org.springframework.cloud.client.circuitbreaker.Customizer;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
@@ -41,8 +40,9 @@ import java.time.Duration;
 
 /**
  * @author Maciej Szarlinski
+ *
+ * NOTE: @EnableDiscoveryClient removed - K8s uses native DNS discovery and service routing
  */
-@EnableDiscoveryClient
 @SpringBootApplication
 public class ApiGatewayApplication {
 

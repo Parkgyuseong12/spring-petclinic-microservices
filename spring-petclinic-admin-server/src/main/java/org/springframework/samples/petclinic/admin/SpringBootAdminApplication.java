@@ -18,11 +18,16 @@ package org.springframework.samples.petclinic.admin;
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
+/**
+ * Spring Boot Admin Application
+ * 
+ * NOTE: @EnableDiscoveryClient has been removed because in Kubernetes
+ * environments, we use native K8s service discovery (DNS) instead of
+ * Spring Cloud Eureka.
+ */
 @SpringBootApplication
 @EnableAdminServer
-@EnableDiscoveryClient
 public class SpringBootAdminApplication {
     public static void main(String[] args) {
         SpringApplication.run(SpringBootAdminApplication.class, args);

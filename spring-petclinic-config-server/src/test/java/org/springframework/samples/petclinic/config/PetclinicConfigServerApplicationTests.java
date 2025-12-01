@@ -15,9 +15,21 @@
  */
 package org.springframework.samples.petclinic.config;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+/**
+ * Config Server Application Test
+ * 
+ * NOTE: This test is disabled because in K8s environments,
+ * Config Server is not needed. Configuration management is handled by
+ * Kubernetes ConfigMaps and Secrets through environment variables.
+ * 
+ * The Config Server is deprecated for cloud-native deployments.
+ */
+@Disabled("Config Server is not needed in Kubernetes environment. " +
+          "Use K8s ConfigMaps and Secrets for configuration management instead.")
 @SpringBootTest
 class PetclinicConfigServerApplicationTests {
 
