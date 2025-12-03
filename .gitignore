@@ -21,3 +21,10 @@ target/
 generated/
 
 **/.DS_Store
+
+# Local secret overrides
+.env
+*.env
+*.env.*
+*.local
+secret-values/

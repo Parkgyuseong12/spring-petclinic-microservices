@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: petclinic-vets
+  labels:
+    app: petclinic-vets
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: petclinic-vets
+  template:
+    metadata:
+      labels:
+        app: petclinic-vets
+    spec:
+      containers:
+        - name: vets-service
+          image: ${ECR_REGISTRY}/kdt-final-petclinic-vets:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: mysql
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: petclinic-config
+                  key: DB_HOST
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://$(DB_HOST):3306/petclinic
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: petclinic-db-secret
+                  key: SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: petclinic-db-secret
+                  key: SPRING_DATASOURCE_PASSWORD
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: petclinic-vets
+  labels:
+    app: petclinic-vets
+spec:
+  type: ClusterIP
+  selector:
+    app: petclinic-vets
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+
