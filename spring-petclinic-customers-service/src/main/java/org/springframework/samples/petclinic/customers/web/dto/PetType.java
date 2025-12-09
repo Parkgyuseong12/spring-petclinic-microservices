@@ -18,6 +18,9 @@ package org.springframework.samples.petclinic.customers.web.dto;
 /**
  * @author Maciej Szarlinski
  */
-public record PetType(String name) {
+public record PetType(Integer id, String name) {
+    public PetType(org.springframework.samples.petclinic.customers.model.PetType petType) {
+        this(petType.getId(), petType.getName());
+    }
 }
 

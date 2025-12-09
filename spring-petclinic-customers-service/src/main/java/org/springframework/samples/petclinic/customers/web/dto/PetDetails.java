@@ -42,7 +42,7 @@ public record PetDetails(
             pet.getId(),
             pet.getName(),
             pet.getBirthDate() != null ? new SimpleDateFormat("yyyy-MM-dd").format(pet.getBirthDate()) : null,
-            pet.getType() != null ? new PetType(pet.getType().getName()) : null,
+            pet.getType() != null ? new PetType(pet.getType()) : null,
             new ArrayList<>()
         );
     }
