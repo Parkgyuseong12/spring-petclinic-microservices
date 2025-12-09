@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: 206799461964.dkr.ecr.ap-northeast-2.amazonaws.com/kdt-final-petclinic-frontend:v1.0.0
+          image: ${ECR_REGISTRY}/kdt-final-petclinic-frontend:${IMAGE_TAG:-v1.0.0}
           imagePullPolicy: Always
           ports:
             - containerPort: 80

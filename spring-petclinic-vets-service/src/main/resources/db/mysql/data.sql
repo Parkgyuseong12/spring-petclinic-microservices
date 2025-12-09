@@ -1,16 +1,22 @@
-INSERT IGNORE INTO vets VALUES (1, 'James', 'Carter');
-INSERT IGNORE INTO vets VALUES (2, 'Helen', 'Leary');
-INSERT IGNORE INTO vets VALUES (3, 'Linda', 'Douglas');
-INSERT IGNORE INTO vets VALUES (4, 'Rafael', 'Ortega');
-INSERT IGNORE INTO vets VALUES (5, 'Henry', 'Stevens');
-INSERT IGNORE INTO vets VALUES (6, 'Sharon', 'Jenkins');
+-- 수의사 데이터
+INSERT IGNORE INTO vets (id, first_name, last_name) VALUES 
+(1, 'James', 'Carter'),
+(2, 'Helen', 'Leary'),
+(3, 'Linda', 'Douglas'),
+(4, 'Rafael', 'Ortega'),
+(5, 'Henry', 'Stevens'),
+(6, 'Sharon', 'Jenkins');
 
-INSERT IGNORE INTO specialties VALUES (1, 'radiology');
-INSERT IGNORE INTO specialties VALUES (2, 'surgery');
-INSERT IGNORE INTO specialties VALUES (3, 'dentistry');
+-- 전문 분야 데이터
+INSERT IGNORE INTO specialties (id, name) VALUES 
+(1, 'radiology'),
+(2, 'surgery'),
+(3, 'dentistry');
 
-INSERT IGNORE INTO vet_specialties VALUES (2, 1);
-INSERT IGNORE INTO vet_specialties VALUES (3, 2);
-INSERT IGNORE INTO vet_specialties VALUES (3, 3);
-INSERT IGNORE INTO vet_specialties VALUES (4, 2);
-INSERT IGNORE INTO vet_specialties VALUES (5, 1);
+-- 수의사-전문 분야 연관 데이터
+INSERT IGNORE INTO vet_specialties (vet_id, specialty_id) VALUES 
+(2, 1),
+(3, 2),
+(3, 3),
+(4, 2),
+(5, 1);

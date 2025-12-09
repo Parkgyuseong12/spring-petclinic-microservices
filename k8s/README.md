@@ -93,8 +93,8 @@ cd k8s
 **Bastion 서버에서 사용 예시:**
 ```bash
 # 환경 변수 설정
-export ECR_REGISTRY=206799461964.dkr.ecr.ap-northeast-2.amazonaws.com
-export RDS_ENDPOINT=kdt-final-mysql.cjwmcufdhb4i.ap-northeast-2.rds.amazonaws.com
+export ECR_REGISTRY=YOUR_ACCOUNT_ID.dkr.ecr.ap-northeast-2.amazonaws.com
+export RDS_ENDPOINT=your-rds-endpoint.rds.amazonaws.com
 
 # 배포 실행
 cd k8s
@@ -107,8 +107,8 @@ cd k8s
 
 ```bash
 # 1. 환경 변수 설정
-export ECR_REGISTRY=206799461964.dkr.ecr.ap-northeast-2.amazonaws.com
-export RDS_ENDPOINT=kdt-final-mysql.cjwmcufdhb4i.ap-northeast-2.rds.amazonaws.com
+export ECR_REGISTRY=YOUR_ACCOUNT_ID.dkr.ecr.ap-northeast-2.amazonaws.com
+export RDS_ENDPOINT=your-rds-endpoint.rds.amazonaws.com
 
 # 2. k8s 디렉토리로 이동
 cd k8s
@@ -145,10 +145,10 @@ envsubst < visits-service.yaml | kubectl apply -f -
 
 ```bash
 # RDS 엔드포인트와 자격증명으로 연결
-mysql -h kdt-final-mysql.cjwmcufdhb4i.ap-northeast-2.rds.amazonaws.com \
-      -u admin \
+mysql -h your-rds-endpoint.rds.amazonaws.com \
+      -u your_username \
       -p \
-      < k8s/init-database.sql
+      < k8s/init-customers-db.sql
 ```
 
 ### 방법 2: Bastion 서버에서 실행
@@ -166,8 +166,8 @@ mysql -h ${RDS_ENDPOINT} \
 
 **환경 변수 예시:**
 ```bash
-export RDS_ENDPOINT=kdt-final-mysql.cjwmcufdhb4i.ap-northeast-2.rds.amazonaws.com
-export DB_USERNAME=admin
+export RDS_ENDPOINT=your-rds-endpoint.rds.amazonaws.com
+export DB_USERNAME=your_username
 export DB_PASSWORD=your_password
 ```
 

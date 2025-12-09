@@ -28,3 +28,16 @@ generated/
 *.env.*
 *.local
 secret-values/
+
+# Log files
+*.log
+build_output.log
+
+# Test and validation scripts
+validate_local_deployment.sh
+validate_local_deployment.ps1
+verify_refactoring.sh
+
+# Sensitive configuration files (with actual values)
+k8s/petclinic-secret.yaml
+k8s/petclinic-config.yaml.local

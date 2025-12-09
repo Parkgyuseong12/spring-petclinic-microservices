@@ -10,7 +10,8 @@ cd "$SCRIPT_DIR"
 
 # 이미지 태그 (환경 변수로 오버라이드 가능)
 IMAGE_TAG="${IMAGE_TAG:-v1.0.0}"
-ECR_REGISTRY="206799461964.dkr.ecr.ap-northeast-2.amazonaws.com"
+ECR_REGISTRY="${ECR_REGISTRY:-YOUR_ACCOUNT_ID.dkr.ecr.ap-northeast-2.amazonaws.com}"
+AWS_REGION="${AWS_REGION:-ap-northeast-2}"
 IMAGE_NAME="kdt-final-petclinic-frontend"
 FULL_IMAGE_NAME="${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
 
@@ -21,9 +22,9 @@ echo "이미지 태그: ${IMAGE_TAG}"
 echo "전체 이미지 이름: ${FULL_IMAGE_NAME}"
 echo ""
 
-# Docker 이미지 빌드
+# Docker 이미지 빌드 (플랫폼 명시)
 echo "[1단계] Docker 이미지 빌드 중..."
-docker build -f spring-petclinic-frontend/Dockerfile -t ${IMAGE_NAME}:${IMAGE_TAG} .
+docker build --platform linux/amd64 -f spring-petclinic-frontend/Dockerfile -t ${IMAGE_NAME}:${IMAGE_TAG} .
 echo "✅ 빌드 완료"
 echo ""
 
@@ -35,9 +36,9 @@ echo ""
 
 # ECR 로그인 확인
 echo "[3단계] ECR 로그인 확인 중..."
-if ! aws ecr get-login-password --region ap-northeast-2 2>/dev/null | docker login --username AWS --password-stdin ${ECR_REGISTRY} 2>/dev/null; then
+if ! aws ecr get-login-password --region ${AWS_REGION} 2>/dev/null | docker login --username AWS --password-stdin ${ECR_REGISTRY} 2>/dev/null; then
     echo "⚠️  ECR 로그인 실패. 수동으로 로그인하세요:"
-    echo "   aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${ECR_REGISTRY}"
+    echo "   aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}"
     exit 1
 fi
 echo "✅ ECR 로그인 완료"

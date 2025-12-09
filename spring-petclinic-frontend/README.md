@@ -19,14 +19,18 @@ docker build -f spring-petclinic-frontend/Dockerfile -t kdt-final-petclinic-fron
 ### 2. ECR에 푸시
 
 ```bash
+# 환경 변수 설정
+export ECR_REGISTRY=YOUR_ACCOUNT_ID.dkr.ecr.ap-northeast-2.amazonaws.com
+export AWS_REGION=ap-northeast-2
+
 # ECR 로그인
-aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 206799461964.dkr.ecr.ap-northeast-2.amazonaws.com
+aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
 
 # 태그 지정
-docker tag kdt-final-petclinic-frontend:v1.0.0 206799461964.dkr.ecr.ap-northeast-2.amazonaws.com/kdt-final-petclinic-frontend:v1.0.0
+docker tag kdt-final-petclinic-frontend:v1.0.0 ${ECR_REGISTRY}/kdt-final-petclinic-frontend:v1.0.0
 
 # 푸시
-docker push 206799461964.dkr.ecr.ap-northeast-2.amazonaws.com/kdt-final-petclinic-frontend:v1.0.0
+docker push ${ECR_REGISTRY}/kdt-final-petclinic-frontend:v1.0.0
 ```
 
 ### 3. K8s 배포
