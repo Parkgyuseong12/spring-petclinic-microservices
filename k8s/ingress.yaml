@@ -23,6 +23,10 @@ metadata:
     # 리스너 포트
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
     
+    # Path Rewrite: /petclinic을 제거하여 Frontend가 루트 경로로 인식하도록 함
+    # 이렇게 하면 /petclinic/webjars/...가 /webjars/...로 변환되어 정적 리소스가 정상적으로 로드됨
+    alb.ingress.kubernetes.io/rewrite-target: /
+    
     # 태그
     alb.ingress.kubernetes.io/tags: Environment=dev,Project=petclinic-msa
 spec:
@@ -30,52 +34,10 @@ spec:
   rules:
   - http:
       paths:
-      # /petclinic으로 시작하는 모든 경로를 Frontend로 라우팅하고 rewrite
+      # /petclinic으로 시작하는 모든 경로를 Frontend로 라우팅
+      # rewrite-target: / 로 인해 /petclinic/webjars/... → /webjars/...로 변환됨
       - path: /petclinic
         pathType: Prefix
-        backend:
-          service:
-            name: petclinic-frontend
-            port:
-              number: 80
-      # 정적 리소스 경로도 처리 (이미지, CSS, JS 등)
-      - path: /images
-        pathType: Prefix
-        backend:
-          service:
-            name: petclinic-frontend
-            port:
-              number: 80
-      - path: /webjars
-        pathType: Prefix
-        backend:
-          service:
-            name: petclinic-frontend
-            port:
-              number: 80
-      - path: /css
-        pathType: Prefix
-        backend:
-          service:
-            name: petclinic-frontend
-            port:
-              number: 80
-      - path: /scripts
-        pathType: Prefix
-        backend:
-          service:
-            name: petclinic-frontend
-            port:
-              number: 80
-      - path: /api
-        pathType: Prefix
-        backend:
-          service:
-            name: petclinic-frontend
-            port:
-              number: 80
-      - path: /health
-        pathType: Exact
         backend:
           service:
             name: petclinic-frontend
