@@ -28,16 +28,18 @@ jobs:
           AWS_REGION: ap-northeast-2
 
       # 3. api-gateway 이미지 빌드 및 푸시
-      - name: Build and Push Api-Gateway
-        # 중요: Dockerfile과 소스 코드가 있는 폴더로 직접 진입합니다.
-        working-directory: ./spring-petclinic-api-gateway 
+      # 3. 이미지 빌드 및 푸시
+      - name: Build and Push Image
+        # [주의] working-directory 설정이 있다면 반드시 삭제하세요.
         env:
           ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com
           ECR_REPOSITORY: api-gateway
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          # 폴더 내부에 들어왔으므로 현재 위치(.)의 Dockerfile을 사용하여 빌드합니다.
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          # 1) -f : Dockerfile이 어디에 있는지 경로를 알려줍니다.
+          # 2) .  : 프로젝트 최상위 루트(Root)를 전체 빌드 범위로 잡습니다.
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f spring-petclinic-api-gateway/Dockerfile .
+          
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       # 4. GitOps 저장소 업데이트 (이 부분은 동일)
