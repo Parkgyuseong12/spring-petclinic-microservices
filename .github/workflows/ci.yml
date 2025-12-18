@@ -27,28 +27,29 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ap-northeast-2
 
-      # 3. 이미지 빌드 및 푸시 (ECR 주소로 수정)
-      - name: Build and Push Image
+      # 3. api-gateway 이미지 빌드 및 푸시
+      - name: Build and Push Api-Gateway
+        # 중요: Dockerfile과 소스 코드가 있는 폴더로 직접 진입합니다.
+        working-directory: ./spring-petclinic-api-gateway 
         env:
           ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com
           ECR_REPOSITORY: api-gateway
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          # ./api-gateway 폴더 안에 있는 Dockerfile을 사용하도록 경로 지정
-          # docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./api-gateway
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./spring-petclinic-api-gateway
+          # 폴더 내부에 들어왔으므로 현재 위치(.)의 Dockerfile을 사용하여 빌드합니다.
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-      # 4. GitOps 저장소의 매니페스트 업데이트
+      # 4. GitOps 저장소 업데이트 (이 부분은 동일)
       - name: Update GitOps Repo
         env:
           ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com
           ECR_REPOSITORY: api-gateway
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          git clone https://${{ secrets.GH_TOKEN }}@github.com/<GITHUB_USER_NAME>/petclinic-gitops.git
+          git clone https://${{ secrets.GH_TOKEN }}@github.com/Parkgyuseong12/petclinic-gitops.git
           cd petclinic-gitops
-          # Deployment YAML 파일 내의 이미지 주소를 새 ECR 주소로 교체
+          # 매니페스트 파일의 경로가 맞는지 확인하세요 (예: k8s/api-gateway-deployment.yaml)
           sed -i "s|image: .*$ECR_REPOSITORY:.*|image: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG|g" k8s/api-gateway-deployment.yaml
           git config user.name "github-actions"
           git config user.email "action@github.com"
