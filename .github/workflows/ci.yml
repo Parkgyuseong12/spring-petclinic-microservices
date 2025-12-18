@@ -1,0 +1,57 @@
+name: CI for PetClinic
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # 1. 빌드 (Maven/Gradle)
+      - name: Build with Maven
+        run: ./mvnw clean package -DskipTests
+
+      # 2. AWS ECR 로그인
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ap-northeast-2
+
+      # 3. 이미지 빌드 및 푸시 (ECR 주소로 수정)
+      - name: Build and Push Image
+        env:
+          # 실제 AWS 계정 ID와 리전을 입력하세요 (예: 123456789012)
+          ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com
+          ECR_REPOSITORY: api-gateway
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          # 태그 이름 자체가 ECR 주소가 됩니다.
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      # 4. GitOps 저장소의 매니페스트 업데이트
+      - name: Update GitOps Repo
+        env:
+          ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com
+          ECR_REPOSITORY: api-gateway
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          git clone https://${{ secrets.GH_TOKEN }}@github.com/<GITHUB_USER_NAME>/petclinic-gitops.git
+          cd petclinic-gitops
+          # Deployment YAML 파일 내의 이미지 주소를 새 ECR 주소로 교체
+          sed -i "s|image: .*$ECR_REPOSITORY:.*|image: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG|g" k8s/api-gateway-deployment.yaml
+          git config user.name "github-actions"
+          git config user.email "action@github.com"
+          git add .
+          git commit -m "Update api-gateway image to $IMAGE_TAG"
+          git push
