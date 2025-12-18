@@ -30,13 +30,12 @@ jobs:
       # 3. 이미지 빌드 및 푸시 (ECR 주소로 수정)
       - name: Build and Push Image
         env:
-          # 실제 AWS 계정 ID와 리전을 입력하세요 (예: 123456789012)
           ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com
           ECR_REPOSITORY: api-gateway
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          # 태그 이름 자체가 ECR 주소가 됩니다.
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          # ./api-gateway 폴더 안에 있는 Dockerfile을 사용하도록 경로 지정
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./api-gateway
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       # 4. GitOps 저장소의 매니페스트 업데이트
