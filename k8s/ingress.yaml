@@ -19,7 +19,7 @@ metadata:
     alb.ingress.kubernetes.io/unhealthy-threshold-count: '2'
     
     # Subnet (Public Subnet에 ALB 생성)
-    alb.ingress.kubernetes.io/subnets: <YOUR_PUBLIC_SUBNET_ID_1>, <YOUR_PUBLIC_SUBNET_ID_2>
+    alb.ingress.kubernetes.io/subnets: subnet-0008e878daa2767c2, subnet-085ac4075d284fbdd
     # 리스너 포트
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
     

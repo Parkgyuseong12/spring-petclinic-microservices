@@ -8,26 +8,26 @@ metadata:
 
 # [핵심] Terraform으로 만든 VPC를 재사용 (새로 만들지 않음)
 vpc:
-  id: "<YOUR_VPC_ID>"      # Terraform Output의 vpc_id 입력
+  id: "vpc-0690535d19c7a782d"      # Terraform Output의 vpc_id 입력
   subnets:
     # Worker Node가 배치될 Private Subnet (외부 접속 차단)
     private:
       ap-northeast-2a:
-        id: "<YOUR_PRIVATE_SUBNET_ID_1>"      # Terraform Output: private_app_subnet_ids[0]
+        id: "subnet-035d5aa8df44871f3"      # Terraform Output: private_app_subnet_ids[0]
       ap-northeast-2b:             # [수정] 서울 리전은 보통 2a, 2c 사용
-        id: "<YOUR_PRIVATE_SUBNET_ID_2>"      # Terraform Output: private_app_subnet_ids[1]
+        id: "subnet-0e51483214b3b39c2"      # Terraform Output: private_app_subnet_ids[1]
     
     # Load Balancer가 배치될 Public Subnet
     public:
       ap-northeast-2a:
-        id: "<YOUR_PUBLIC_SUBNET_ID_1>"      # Terraform Output: public_subnet_ids[0]
+        id: "subnet-0008e878daa2767c2"      # Terraform Output: public_subnet_ids[0]
       ap-northeast-2b:
-        id: "<YOUR_PUBLIC_SUBNET_ID_2>"      # Terraform Output: public_subnet_ids[1]
+        id: "subnet-085ac4075d284fbdd"      # Terraform Output: public_subnet_ids[1]
 
 # 관리형 노드 그룹 (EC2 Worker Nodes)
 managedNodeGroups:
   - name: petclinic-ng-general
-    instanceType: t3.medium        # 2 vCPU, 4GB RAM (가성비)
+    instanceType: t3.large        # 2 vCPU, 4GB RAM (가성비)
     minSize: 2
     desiredCapacity: 2             # [비용] 평소엔 2대로 유지
     maxSize: 5                     # 부하 시 최대 5대까지 확장

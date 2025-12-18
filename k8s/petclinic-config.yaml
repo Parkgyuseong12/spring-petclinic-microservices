@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: petclinic-config
 data:
-  DB_HOST: <YOUR_RDS_ENDPOINT>
+  DB_HOST: petclinic-db-prod.ccitclnvbmiv.ap-northeast-2.rds.amazonaws.com
