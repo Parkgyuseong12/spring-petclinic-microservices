@@ -35,7 +35,8 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           # ./api-gateway 폴더 안에 있는 Dockerfile을 사용하도록 경로 지정
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./api-gateway
+          # docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./api-gateway
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./spring-petclinic-api-gateway
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       # 4. GitOps 저장소의 매니페스트 업데이트
